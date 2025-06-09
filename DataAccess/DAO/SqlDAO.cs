@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,23 @@ namespace DataAccess.DAO
 
         public void ExecuteProcedure(SqlOperation operation)
         {
-            //TBD
+            using (var conn = new SqlConnection(_connectionString)) 
+            {
+                using (var command = new SqlCommand(operation.ProcedureName, conn) 
+                { 
+                    CommandType = System.Data.CommandType.StoredProcedure
+                }) 
+                {
+                    //set de los params
+                    foreach (var param in operation.Parameters)
+                    {
+                        command.Parameters.Add(param);
+                    }
+                    //exec SP
+                    conn.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         public List<Dictionary<string, object>> ExecuteQueryProcedure(SqlOperation operation) {
