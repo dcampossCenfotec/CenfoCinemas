@@ -13,7 +13,7 @@ namespace DataAccess.DAO
         private string _connectionString;
 
         private SqlDAO() {
-            _connectionString = string.Empty;
+            _connectionString = @"Data Source=srv-sqldb-dcampos.database.windows.net;User ID=sysman;Password=Cenfotec123!;Trust Server Certificate=True";
         }
 
         public static SqlDAO GetInstance() {
