@@ -14,10 +14,11 @@ namespace CoreApp
 
         private readonly string fromEmail = "danicamposs2000@gmail.com";
         private readonly string fromName = "CenfoCinemas";
+        private readonly string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
 
         public async Task SendWelcomeEmail(string email, string name)
         {
-            var client = new SendGridClient("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");
+            var client = new SendGridClient(apiKey);
             var from = new EmailAddress(fromEmail, fromName);
             var to = new EmailAddress(email, name);
             var subject = "¡Bienvenido a CenfoCinemas!";
@@ -30,7 +31,7 @@ namespace CoreApp
 
         public async Task SendNewMovie(string movieTitle, List<User> recipients)
         {
-            var client = new SendGridClient("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");
+            var client = new SendGridClient(apiKey);
             var from = new EmailAddress(fromEmail, fromName);
             var subject = $"Nueva película agregada: {movieTitle}";
             var plainTextContent = $"¡Hola! Hemos agregado una nueva película: {movieTitle}. ¡No te la pierdas!";
