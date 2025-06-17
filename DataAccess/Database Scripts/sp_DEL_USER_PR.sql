@@ -1,0 +1,14 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- SP para eliminar un usuario por Id
+CREATE PROCEDURE [dbo].[DEL_USER_PR]
+    @P_Id INT
+AS
+BEGIN
+    DELETE FROM TBL_User
+    WHERE Id = @P_Id;
+END
+GO

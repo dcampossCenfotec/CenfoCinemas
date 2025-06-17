@@ -1,4 +1,5 @@
-﻿using DTOs;
+﻿using DataAccess.DAO;
+using DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,54 @@ namespace DataAccess.CRUD
         {
             throw new NotImplementedException();
         }
-        public override T RetrieveById<T>()
+
+        public T RetrieveByUserCode<T>(User user)
         {
-            throw new NotImplementedException();
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_USERCODE_PR" };
+            sqlOperation.AddStringParameter("P_UserCode", user.UserCode);
+
+            var lstResult = _sqlDao.ExecuteQueryProcedure(sqlOperation);    
+
+            if (lstResult.Count > 0)
+            {
+                var row = lstResult[0];
+                user = BuildUser(row);
+                return (T) Convert.ChangeType(user, typeof(T));
+            }
+            return default(T);
+        }
+
+        public T RetrieveByEmail<T>(User user)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_EMAIL_PR" };
+            sqlOperation.AddStringParameter("P_Email", user.Email);
+
+            var lstResult = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResult.Count > 0)
+            {
+                var row = lstResult[0];
+                user = BuildUser(row);
+                return (T)Convert.ChangeType(user, typeof(T));
+            }
+            return default(T);
+        }
+public override T RetrieveById<T>(int id)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_ID_PR" };
+
+            sqlOperation.AddIntParam("P_Id", id);
+
+            var lstResult = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResult.Count > 0)
+            {
+                var row = lstResult[0];
+                var user = BuildUser(row);
+                return (T)Convert.ChangeType(user, typeof(T));
+            }
+
+            return default(T);
         }
         public override List<T> RetrieveAll<T>()
         {

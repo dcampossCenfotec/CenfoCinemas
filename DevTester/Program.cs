@@ -1,8 +1,12 @@
-﻿using DataAccess.DAO;
+﻿using CoreApp;
+using DataAccess.CRUD;
+using DataAccess.DAO;
 using DTOs;
 using Newtonsoft.Json;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
+using static Azure.Core.HttpHeader;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 //public class Program
 //{
@@ -70,9 +74,10 @@ class Program
             Console.WriteLine("--- Users Menu ---");
             Console.WriteLine("1. Create User");
             Console.WriteLine("2. Retrieve User");
-            Console.WriteLine("3. Update User");
-            Console.WriteLine("4. Delete User");
-            Console.WriteLine("5. Volver");
+            Console.WriteLine("3. Retrieve User By Id");
+            Console.WriteLine("4. Update User");
+            Console.WriteLine("5. Delete User");
+            Console.WriteLine("6. Volver");
             Console.Write("Seleccione una opción: ");
             string choice = Console.ReadLine();
 
@@ -107,8 +112,10 @@ class Program
 
                     var user = new User() { UserCode = userCode, Name = name, Email = email , Password = password, Status = status, Birth = bday};
 
-                    var UserCrudFactory = new DataAccess.CRUD.UsersCrudFactory();
-                    UserCrudFactory.Create(user);
+                    var uManager = new UserManager();
+                    uManager.Create(user);
+
+                    Console.WriteLine("Usuario creado exitosamente");
 
                     break;
                 case "2":
@@ -120,12 +127,37 @@ class Program
                     }
                     break;
                 case "3":
-                    Console.WriteLine("[Update User] lógica de actualización aquí...");
+                    try
+        {
+                        Console.Write("Ingrese el ID del usuario: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            Console.WriteLine("ID inválido.");
+                            return;
+                        }
+
+                        var uCrud = new DataAccess.CRUD.UsersCrudFactory();
+                        var u = uCrud.RetrieveById<User>(id);
+
+                        if (u == null)
+                        {
+                            Console.WriteLine("Usuario no encontrado.");
+                            return;
+                        }
+
+                        Console.WriteLine("Usuario encontrado:\n" + JsonConvert.SerializeObject(u));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error al consultar usuario: {ex.Message}");
+                    }
                     break;
                 case "4":
                     Console.WriteLine("[Delete User] lógica de eliminación aquí...");
                     break;
                 case "5":
+                    break;
+                case "6":
                     back = true;
                     continue;
                 default:
@@ -147,9 +179,10 @@ class Program
             Console.WriteLine("--- Movies Menu ---");
             Console.WriteLine("1. Create Movie");
             Console.WriteLine("2. Retrieve Movie");
-            Console.WriteLine("3. Update Movie");
-            Console.WriteLine("4. Delete Movie");
-            Console.WriteLine("5. Volver");
+            Console.WriteLine("3. Retrieve Movie By Id");
+            Console.WriteLine("4. Update Movie");
+            Console.WriteLine("5. Delete Movie");
+            Console.WriteLine("6. Volver");
             Console.Write("Seleccione una opción: ");
             string choice = Console.ReadLine();
 
@@ -178,34 +211,55 @@ class Program
                         Console.WriteLine("Fecha inválida. Por favor ingrésala en formato yyyy-MM-dd o similar:");
                         input = Console.ReadLine();
                     }
-                    try
-                    {
-                        sqlOperation.ProcedureName = "CRE_MOVIE_PR";
 
-                        sqlOperation.AddStringParameter("P_Title", title);
-                        sqlOperation.AddStringParameter("P_Description", description);
-                        sqlOperation.AddDateTimeParam("P_ReleaseDate", releaseDate);
-                        sqlOperation.AddStringParameter("P_Genre", genre);
-                        sqlOperation.AddStringParameter("P_Director", director);
-                        sqlDao.ExecuteProcedure(sqlOperation);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("Error");
-                        throw;
-                    }
-                    
+                    var movie = new Movie() { Title = title, Description = description, ReleaseDate = releaseDate, Genre = genre, Director = director};
+
+                    var mManager = new MovieManager();
+                    mManager.Create(movie);
+
+                    Console.WriteLine("Película registrada exitosamente.");
+
                     break;
                 case "2":
-                    Console.WriteLine("[Retrieve Movie] lógica de consulta aquí...");
+                    var moviesCrudFactory = new DataAccess.CRUD.MovieCrudFactory();
+                    var lstMovies = moviesCrudFactory.RetrieveAll<Movie>();
+                    foreach (var u in lstMovies)
+                    {
+                        Console.WriteLine(JsonConvert.SerializeObject(u));
+                    }
                     break;
                 case "3":
-                    Console.WriteLine("[Update Movie] lógica de actualización aquí...");
+                    try
+                    {
+                        Console.Write("Ingrese el ID de la película: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            Console.WriteLine("ID inválido.");
+                            return;
+                        }
+
+                        var uCrud = new DataAccess.CRUD.MovieCrudFactory(); ;
+                        var m = uCrud.RetrieveById<Movie>(id);
+
+                        if (m == null)
+                        {
+                            Console.WriteLine("Película no encontrada.");
+                            return;
+                        }
+
+                        Console.WriteLine("Película encontrada:\n" + JsonConvert.SerializeObject(m));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error al consultar película: {ex.Message}");
+                    }
                     break;
                 case "4":
                     Console.WriteLine("[Delete Movie] lógica de eliminación aquí...");
                     break;
                 case "5":
+                    break;
+                case "6":
                     back = true;
                     continue;
                 default:
