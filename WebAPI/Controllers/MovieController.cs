@@ -61,13 +61,13 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(User user)
+        public ActionResult Update(Movie movie)
         {
             try
             {
-                var um = new UserManager();
-                var updatedUser = um.Update(user);
-                return Ok(updatedUser);
+                var mm = new MovieManager();
+                var updatedMovie = mm.Update(movie);
+                return Ok(updatedMovie);
             }
             catch (Exception ex)
             {
@@ -77,13 +77,13 @@ namespace WebAPI.Controllers
 
         [HttpDelete]
         [Route("Delete")]
-        public ActionResult Delete(User user)
+        public ActionResult Delete(Movie movie)
         {
             try
             {
-                var um = new UserManager();
-                var deletedUser = um.Delete(user);
-                return Ok(deletedUser);
+                var mm = new MovieManager();
+                var deletedMovie = mm.Delete(movie);
+                return Ok(deletedMovie);
             }
             catch (Exception ex)
             {

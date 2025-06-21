@@ -44,6 +44,52 @@ namespace CoreApp
             }
         }
 
+        public Movie Update(Movie movie)
+        {
+            try
+            {
+                var mCrud = new MovieCrudFactory();
+                var mExist = mCrud.RetrieveById<Movie>(movie.Id);
+                if (mExist != null)
+                {
+                    mCrud.Update(movie);
+                    return movie;
+                }
+                else
+                {
+                    throw new Exception("La pelicula no existe en la base de datos.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+                return null; // En caso de error, retornamos null
+            }
+        }
+
+        public Movie Delete(Movie movie)
+        {
+            try
+            {
+                var mCrud = new MovieCrudFactory();
+                var mExist = mCrud.RetrieveById<Movie>(movie.Id);
+                if (mExist != null)
+                {
+                    mCrud.Delete(movie);
+                    return movie;
+                }
+                else
+                {
+                    throw new Exception("La pelicula no existe en la base de datos.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+                return null; // En caso de error, retornamos null
+            }
+        }
+
         public List<Movie> RetrieveAll()
         {
             var mCrud = new MovieCrudFactory();
