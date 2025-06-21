@@ -76,5 +76,68 @@ namespace CoreApp
             return age >= 18;
         }
 
+        public List<User> RetrieveAll()
+        {
+            var uCrud = new UsersCrudFactory();
+            return uCrud.RetrieveAll<User>();
+        }
+
+        public User RetrieveByUserCode(User user)
+        {
+            var uCrud = new UsersCrudFactory();
+            return uCrud.RetrieveByUserCode<User>(user);
+        }
+
+        public User RetrieveByEmail(User user)
+        {
+            var uCrud = new UsersCrudFactory();
+            return uCrud.RetrieveByEmail<User>(user);
+        }
+
+        public User Update(User user)
+        {
+            try
+            {
+                var uCrud = new UsersCrudFactory();
+                var uExist = uCrud.RetrieveById<User>(user.Id);
+                if (uExist != null)
+                {
+                    uCrud.Update(user);
+                    return user;
+                }
+                else
+                {
+                    throw new Exception("El usuario no existe en la base de datos.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+                return null; // En caso de error, retornamos null
+            }
+        }
+
+        public User Delete(User user)
+        {
+            try
+            {
+                var uCrud = new UsersCrudFactory();
+                var uExist = uCrud.RetrieveById<User>(user.Id);
+                if (uExist != null)
+                {
+                    uCrud.Delete(user);
+                    return user;
+                }
+                else
+                {
+                    throw new Exception("El usuario no existe en la base de datos.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+                return null; // En caso de error, retornamos null
+            }
+        }
     }
 }

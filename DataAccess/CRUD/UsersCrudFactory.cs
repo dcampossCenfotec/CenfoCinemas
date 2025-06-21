@@ -35,11 +35,37 @@ namespace DataAccess.CRUD
         }
         public override void Update(BaseDTO baseDTO)
         {
-            throw new NotImplementedException();
+            var user = baseDTO as User;
+
+            var sqlOperation = new DAO.SqlOperation
+            {
+                ProcedureName = "UPD_USER_PR"
+            };
+
+            sqlOperation.AddIntParam("P_Id", user.Id);
+            sqlOperation.AddStringParameter("P_UserCode", user.UserCode);
+            sqlOperation.AddStringParameter("P_Name", user.Name);
+            sqlOperation.AddStringParameter("P_Email", user.Email);
+            sqlOperation.AddStringParameter("P_Password", user.Password);
+            sqlOperation.AddDateTimeParam("P_BirthDate", user.Birth);
+            sqlOperation.AddStringParameter("P_Status", user.Status);
+
+            _sqlDao.ExecuteProcedure(sqlOperation);
+
         }
         public override void Delete(BaseDTO baseDTO)
         {
-            throw new NotImplementedException();
+            var user = baseDTO as User;
+
+            var sqlOperation = new DAO.SqlOperation
+            {
+                ProcedureName = "DEL_USER_PR"
+            };
+
+            sqlOperation.AddIntParam("P_Id", user.Id);
+
+            _sqlDao.ExecuteProcedure(sqlOperation);
+
         }
         public override T Retrieve<T>()
         {
@@ -77,7 +103,7 @@ namespace DataAccess.CRUD
             }
             return default(T);
         }
-public override T RetrieveById<T>(int id)
+        public override T RetrieveById<T>(int id)
         {
             var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_ID_PR" };
 

@@ -3,7 +3,7 @@ CREATE PROCEDURE RET_USER_BY_USERCODE_PR
 AS
 BEGIN
     SELECT Id, Created, Updated, UserCode, Name, Email, Password, BirthDate, Status
-	FROM TBL_UserMore actions
+	FROM TBL_User
 	WHERE UserCode = @P_UserCode;
 END
 GO

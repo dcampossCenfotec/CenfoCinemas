@@ -22,6 +22,8 @@ namespace DataAccess.CRUD
             {
                 ProcedureName = "CRE_MOVIE_PR"
             };
+            
+            sqlOperation.AddIntParam("P_Id", movie.Id);
             sqlOperation.AddStringParameter("P_Title", movie.Title);
             sqlOperation.AddStringParameter("P_Description", movie.Description);
             sqlOperation.AddStringParameter("P_Director", movie.Director);
@@ -32,7 +34,18 @@ namespace DataAccess.CRUD
 
         public override void Update(BaseDTO baseDTO)
         {
-            throw new NotImplementedException();
+            var movie = baseDTO as Movie;
+            var sqlOperation = new DAO.SqlOperation
+            {
+                ProcedureName = "UPD_MOVIE_PR"
+            };
+            sqlOperation.AddStringParameter("P_Title", movie.Title);
+            sqlOperation.AddStringParameter("P_Description", movie.Description);
+            sqlOperation.AddStringParameter("P_Director", movie.Director);
+            sqlOperation.AddDateTimeParam("P_ReleaseDate", movie.ReleaseDate);
+            sqlOperation.AddStringParameter("P_Genre", movie.Genre);
+            _sqlDao.ExecuteProcedure(sqlOperation);
+
         }
         public override void Delete(BaseDTO baseDTO)
         {
