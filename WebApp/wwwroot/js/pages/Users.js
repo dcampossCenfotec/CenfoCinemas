@@ -5,6 +5,21 @@ function usersViewController() {
 
     this.initVIew = function () {
         this.loadTable();
+
+        $('#btnCreate').click(function () {
+            var vc = new usersViewController();
+            vc.Create();
+        })
+
+        $('#btnUpdate').click(function () {
+            var vc = new usersViewController();
+            vc.Update();
+        })
+
+        $('#btnDelete').click(function () {
+            var vc = new usersViewController();
+            vc.Delete();
+        })
     }
 
     this.loadTable = function () {
@@ -31,20 +46,72 @@ function usersViewController() {
             "columns": columns
         });
 
-        /*
-          {
-    "userCode": "string",
-    "name": "Daniel",
-    "email": "dcamposs@ucenfotec.ac.cr",
-    "password": "string",
-    "birth": "2000-06-21T15:16:24.21",
-    "status": "string",
-    "id": 2,
-    "created": "2025-06-21T15:16:46.517",
-    "updated": "0001-01-01T00:00:00"
-  }
-        */
+    }
 
+    this.Create = function () {
+        var userDTO = {};
+
+        userDTO.id = 0; // Default value for new user
+        userDTO.created = new Date().toISOString(); // Set current date as created date
+        userDTO.updated = new Date().toISOString(); // Set current date as updated date
+
+        userDTO.userCode = $('#txtUserCode').val();
+        userDTO.name = $('#txtName').val();
+        userDTO.email = $('#txtEmail').val();   
+        userDTO.status = $('#txtStatus').val(); 
+        userDTO.birth = $('#txtBirthDate').val();   
+        userDTO.password = $('#txtPassword').val(); 
+
+        var controlActions = new ControlActions();
+        var urlService = this.ApiEndPointName + "/Create";
+
+        controlActions.PostToAPI(urlService, userDTO, function (response) {
+            $('#tblUsers').dataTable().ajax.reload(); // Reload the table after creating a user
+        })
+    }
+
+    this.Update = function () {
+        var userDTO = {};
+
+        userDTO.id = $('#txtId').val(); 
+        userDTO.created = new Date().toISOString(); // Set current date as created date
+        userDTO.updated = new Date().toISOString(); // Set current date as updated date
+
+        userDTO.userCode = $('#txtUserCode').val();
+        userDTO.name = $('#txtName').val();
+        userDTO.email = $('#txtEmail').val();
+        userDTO.status = $('#txtStatus').val();
+        userDTO.birth = $('#txtBirthDate').val();
+        userDTO.password = $('#txtPassword').val();
+
+        var controlActions = new ControlActions();
+        var urlService = this.ApiEndPointName + "/Update";
+
+        controlActions.PutToAPI(urlService, userDTO, function (response) {
+            $('#tblUsers').dataTable().ajax.reload(); // Reload the table after creating a user
+        })
+    }
+
+    this.Delete = function () {
+        var userDTO = {};
+
+        userDTO.id = $('#txtId').val(); // Default value for new user
+        userDTO.created = new Date().toISOString(); // Set current date as created date
+        userDTO.updated = new Date().toISOString(); // Set current date as updated date
+
+        userDTO.userCode = $('#txtUserCode').val();)
+        userDTO.name = $('#txtName').val();
+        userDTO.email = $('#txtEmail').val();
+        userDTO.status = $('#txtStatus').val();
+        userDTO.birth = $('#txtBirthDate').val();
+        userDTO.password = $('#txtPassword').val();
+
+        var controlActions = new ControlActions();
+        var urlService = this.ApiEndPointName + "/Delete";
+
+        controlActions.DeleteToAPI(urlService, userDTO, function (response) {
+            $('#tblUsers').dataTable().ajax.reload(); // Reload the table after creating a user
+        })
     }
 }
 
