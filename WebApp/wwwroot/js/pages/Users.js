@@ -99,7 +99,7 @@ function usersViewController() {
         userDTO.created = new Date().toISOString(); // Set current date as created date
         userDTO.updated = new Date().toISOString(); // Set current date as updated date
 
-        userDTO.userCode = $('#txtUserCode').val();)
+        userDTO.userCode = $('#txtUserCode').val();
         userDTO.name = $('#txtName').val();
         userDTO.email = $('#txtEmail').val();
         userDTO.status = $('#txtStatus').val();
